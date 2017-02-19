@@ -6,7 +6,7 @@ GUI which runs on Auxiliary Display (Raspberry Pi).
 
 issue `python3.4 server/server.py` command from shell to run client
 
-## Client
+### Client
 Application which runs on main machine (laptop, desktop, anything other than your auxiliary display) and pushes data to server on auxiliary display.
 
 issue `python3.4 client/client.py` command from shell to run client
