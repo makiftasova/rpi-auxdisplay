@@ -105,7 +105,7 @@ if __name__ == "__main__":
     client = Client(debug=debug)
     time.sleep(1)
     client.connect()
-    rss_reader = RssReader('http://aa.com.tr/tr/rss/default?cat=guncel', client, interval=1 / 6)
+    rss_reader = RssReader('http://aa.com.tr/tr/rss/default?cat=guncel', client)
     rss_reader.start()
     while True:
         x = input(">>>")
