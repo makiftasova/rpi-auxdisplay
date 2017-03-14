@@ -2,11 +2,13 @@ import logging
 import socket
 import sys
 import json
+
 from time import sleep
 
 from zeroconf import ServiceBrowser, ServiceStateChange, Zeroconf, ZeroconfServiceTypes
 
 from netdiscovery import AuxDisplayListener
+from rss_reader import RssReader
 
 
 class UpdateType(object):
@@ -87,7 +89,7 @@ def handle_command(cmd):
     args = cmd.split(" ")
     data_type = args[0]
     json_str = ""
-    if data_type == UpdateType.NEWS:
+    if data_type == UpdateType.STOCK:
         json_str = json.dumps({'type': data_type, 'data': args[1:]})
     else:
         data = " ".join(args[1:])
@@ -103,6 +105,7 @@ if __name__ == "__main__":
     client = Client(debug=debug)
     sleep(1)
     client.connect()
+    rss_reader = RssReader('http://aa.com.tr/tr/rss/default?cat=guncel', client, interval=1/6)
     while True:
         x = input(">>>")
         if x == "quit":
