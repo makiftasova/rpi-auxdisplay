@@ -1,11 +1,21 @@
 import logging
 import socket
 import sys
+import json
 from time import sleep
 
 from zeroconf import ServiceBrowser, ServiceStateChange, Zeroconf, ZeroconfServiceTypes
 
 from netdiscovery import AuxDisplayListener
+
+
+class UpdateType(object):
+    CLOCK = 'clock'
+    COMMAND = 'command'
+    EMAIL = 'email'
+    NEWS = 'news'
+    STOCK = 'stock'
+    WEATHER = 'weather'
 
 
 class Client(object):
@@ -27,12 +37,12 @@ class Client(object):
         logging.basicConfig(level=log_level)
         logging.getLogger('zeroconf').setLevel(log_level)
 
-    def send_command(self, data: str):
+    def send_json(self, json: str):
         if not self.is_connected:
             self.connect()
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((self.display_ip, self.display_port))
-        len_sent = s.send(bytes(data, 'UTF-8'))
+        len_sent = s.send(bytes(json, 'UTF-8'))
         s.close()
         return len_sent
 
@@ -71,6 +81,21 @@ class Client(object):
         self.zeroconf.close()
 
 
+# TODO temp code for testing
+def handle_command(cmd):
+    cmd = cmd.lower()
+    args = cmd.split(" ")
+    data_type = args[0]
+    json_str = ""
+    if data_type == UpdateType.NEWS:
+        json_str = json.dumps({'type': data_type, 'data': args[1:]})
+    else:
+        data = " ".join(args[1:])
+        json_str = json.dumps({'type': data_type, 'data': data})
+
+    return json_str
+
+
 if __name__ == "__main__":
     debug = False
     if len(sys.argv) > 1:
@@ -81,6 +106,8 @@ if __name__ == "__main__":
     while True:
         x = input(">>>")
         if x == "quit":
+            json_str = json.dumps({'type': UpdateType.COMMAND, 'data': 'quit'})
+            client.send_json(json_str)
             client.close()
             break
-        client.send_command(x)
+        client.send_json(handle_command(x))
