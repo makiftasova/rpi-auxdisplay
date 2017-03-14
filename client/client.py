@@ -2,13 +2,12 @@ import logging
 import socket
 import sys
 import json
-
-from time import sleep
+import time
 
 from zeroconf import ServiceBrowser, ServiceStateChange, Zeroconf, ZeroconfServiceTypes
 
 from netdiscovery import AuxDisplayListener
-from rss_reader import RssReader
+from rssreader import RssReader
 
 
 class UpdateType(object):
@@ -39,12 +38,13 @@ class Client(object):
         logging.basicConfig(level=log_level)
         logging.getLogger('zeroconf').setLevel(log_level)
 
-    def send_json(self, json: str):
+    def send_json(self, json_str: str):
         if not self.is_connected:
             self.connect()
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((self.display_ip, self.display_port))
-        len_sent = s.send(bytes(json, 'UTF-8'))
+        len_sent = s.send(bytes(json_str, 'UTF-8'))
+        print("sent: ", len_sent, len(json_str), len_sent == len(json_str))
         s.close()
         return len_sent
 
@@ -103,14 +103,18 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         debug = sys.argv[1:] == ['--debug']
     client = Client(debug=debug)
-    sleep(1)
+    time.sleep(1)
     client.connect()
-    rss_reader = RssReader('http://aa.com.tr/tr/rss/default?cat=guncel', client, interval=1/6)
+    rss_reader = RssReader('http://aa.com.tr/tr/rss/default?cat=guncel', client, interval=1 / 6)
+    rss_reader.start()
     while True:
         x = input(">>>")
         if x == "quit":
+            qtime = time.time()
             json_str = json.dumps({'type': UpdateType.COMMAND, 'data': 'quit'})
             client.send_json(json_str)
+            rss_reader.cancel()
             client.close()
+            client.logger.info("time spent for quiting: " + str(time.time() - qtime) + " seconds")
             break
         client.send_json(handle_command(x))

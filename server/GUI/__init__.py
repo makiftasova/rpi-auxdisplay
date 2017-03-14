@@ -33,7 +33,7 @@ class CustomTCPServer(socketserver.TCPServer):
 
 class ClientRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
-        data = self.request.recv(1024).strip().decode('UTF-8')
+        data = self.request.recv(4096).strip().decode('UTF-8')
         self.server.logger.info("data received: " + data)
 
         if self.server.gui is not None:
@@ -93,14 +93,12 @@ class MainWindow(tk.Tk):
         self.news_label = SlidingLabel(master=self)
         self.news_label.pack(anchor='nw', fill='x', expand=True)
 
-        # TODO temp line
-        self.news_label.load_lines(["very important news", "some other news", "just another one"])
+        self.news_label.load_lines(["breaking news"])
 
         self.stock_label = SlidingLabel(master=self, separator="|")
         self.stock_label.pack(after=self.news_label, anchor='nw', fill='x', expand=True)
 
-        # TODO TEMP
-        self.stock_label.load_lines(["USD 3.65", "EUR 4.01"])
+        self.stock_label.load_lines(["Exchange Rates"])
 
         self.btn_quit = ttk.Button(text="Quit", command=self.on_exit)
         self.btn_quit.pack()
@@ -136,6 +134,7 @@ class MainWindow(tk.Tk):
         self.news_label.load_lines(self.sock_data)
 
     def handle_stock_update(self, event):
+        self.stock_label.load_lines(self.sock_data)
         pass
 
     def handle_weather_update(self, event):
