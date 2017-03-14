@@ -34,6 +34,8 @@ class RssReader(threading.Thread):
             while True:
                 if time.time() - sleep_begin >= self.refresh_interval:
                     break
+                if self.loop is False:
+                    break
                 time.sleep(0.2)
 
         self.logger.info("RSS reader stopped")
