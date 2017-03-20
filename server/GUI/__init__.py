@@ -58,7 +58,7 @@ class MainWindow(tk.Tk):
 
         self.resizable(width=False, height=False)
         self.geometry('{w}x{h}+{x}+{y}'.format(w=800, h=480, x=0, y=0))
-        self.overrideredirect(True) # disable title bar etc.
+        self.overrideredirect(True)  # disable title bar etc.
 
         self.sock_data = None
 
@@ -87,21 +87,26 @@ class MainWindow(tk.Tk):
         self.bind(sequence=self.__EVENT_STOCK_UPDATE, func=self.handle_stock_update)
         self.bind(sequence=self.__EVENT_WEATHER_UPDATE, func=self.handle_weather_update)
 
-        self.msg = tk.StringVar()
-        self.message_box = ttk.Label(textvariable=self.msg)
-        self.message_box.pack()
+        self.news_label = None
+        self.stock_label = None
+        self.btn_quit = None
+        self.after(10, self.__init_widgets__)
 
-        self.news_label = SlidingLabel(master=self)
-        self.news_label.pack(anchor='nw', fill='x', expand=True)
+    def __init_widgets__(self):
+        self.news_label = SlidingLabel(master=self, text_length=25)
+        # self.news_label.grid(row=0, sticky=tk.W)
+        self.news_label.pack(fill=tk.X)
 
-        self.news_label.load_lines(["breaking news"])
+        self.news_label.load_lines(["Breaking News"])
 
-        self.stock_label = SlidingLabel(master=self, separator="|")
-        self.stock_label.pack(after=self.news_label, anchor='nw', fill='x', expand=True)
+        self.stock_label = SlidingLabel(master=self, separator="|", text_length=25)
+        # self.stock_label.grid(row=1, sticky=tk.W)
+        self.stock_label.pack(after=self.news_label, fill=tk.X)
 
         self.stock_label.load_lines(["Exchange Rates"])
 
         self.btn_quit = ttk.Button(text="Quit", command=self.on_exit)
+        # self.btn_quit.grid(row=2, sticky=tk.W)
         self.btn_quit.pack()
 
     def trigger_gui_update(self, data_type):

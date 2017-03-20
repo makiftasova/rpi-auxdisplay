@@ -3,8 +3,8 @@ from tkinter import ttk
 
 
 class SlidingLabel(ttk.Label):
-    def __init__(self, separator=u"\u00B7", master=None, text=None, delay=200,
-                 font=("Helvetica", 50), **kw):
+    def __init__(self, separator=u"\u00B7", master=None, text=None, text_length=80, delay=150,
+                 font=("Monospace", 50), **kw):
         """Construct a Ttk Label with parent master.
 
         STANDARD OPTIONS
@@ -18,8 +18,10 @@ class SlidingLabel(ttk.Label):
             relief, text, wraplength
         :param separator: separator character for list items
         :param text: initial text (optional)
-        :param font: text font. default is ("Helvetica", 50)
-        :param delay: sleep time before sliding to next position in ms, default is 200ms
+        :param text_length: length of visible text. widget only shows this number of characters
+        at a time
+        :param font: text font. default is ("Monospace", 50)
+        :param delay: sleep time before sliding to next position in ms, default is 150ms
         """
         self.__str_var = tk.StringVar()
         super(SlidingLabel, self).__init__(master, font=font,
@@ -27,18 +29,26 @@ class SlidingLabel(ttk.Label):
         self.separator = separator
         self.delay = delay  # wait time before sliding to next position, in ms
         self.text = text if text else ""
+        self.text_len = text_length
         self.__str_var.set(self.text)
         self.master.after(self.delay, self.__update_text_position)
+
+    def __update_ui(self):
+        if len(self.text) < self.text_len:
+            __diff = self.text_len - len(self.text)
+            __half_diff = int((__diff + 0.5) / 2)
+            self.text = (" " * __half_diff) + self.text + (" " * __half_diff)
+        self.__str_var.set(self.text[0:self.text_len])
 
     def __update_text_position(self):
         if len(self.text) > 1:
             self.text = self.text[1:] + self.text[0]
-            self.__str_var.set(self.text)
+            self.__update_ui()
             self.master.after(self.delay, self.__update_text_position)
 
     def load_lines(self, line_list):
-        sep = " " + self.separator + " "
-        txt = sep.join(line_list)
+        sep = " " + self.separator + " " if (len(line_list) > 1) else " "
+        txt = " " + sep.join(line_list)
         txt += sep
         self.text = txt
-        self.__str_var.set(self.text)
+        self.__update_ui()
