@@ -57,7 +57,8 @@ class MainWindow(tk.Tk):
         self.protocol('WM_DELETE_WINDOW', self.on_exit)
 
         self.resizable(width=False, height=False)
-        self.geometry('{}x{}'.format(800, 480))
+        self.geometry('{w}x{h}+{x}+{y}'.format(w=800, h=480, x=0, y=0))
+        self.overrideredirect(True) # disable title bar etc.
 
         self.sock_data = None
 
