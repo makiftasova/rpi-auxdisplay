@@ -1,3 +1,4 @@
+import builtins
 import time
 import threading
 
@@ -24,6 +25,14 @@ class LoopTask(threading.Thread):
         Override this method to use LoopTask. THis method will be called after given interval
         :return:
         """
+        raise NotImplementedError("LoopTask.loop(9 method is not implemented. Please inherit "
+                                  "LoopTask and override LoopTask.loop() in subclass")
+
+    def on_cancel(self):
+        """
+        Called when Thread is successfully canceled
+        :return:
+        """
         pass
 
     def run(self):
@@ -36,6 +45,7 @@ class LoopTask(threading.Thread):
                 if self.__looptask_loop is False:
                     break
                 time.sleep(self.__looptask_sleep_time)
+        self.on_cancel()
 
     def cancel(self):
         self.__looptask_loop = False

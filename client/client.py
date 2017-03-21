@@ -8,6 +8,7 @@ from zeroconf import ServiceBrowser, ServiceStateChange, Zeroconf, ZeroconfServi
 
 from netdiscovery import AuxDisplayListener
 from rssreader import RssReader
+from maildaemon import MailDaemon
 
 
 class UpdateType(object):
@@ -103,11 +104,21 @@ if __name__ == "__main__":
     debug = False
     if len(sys.argv) > 1:
         debug = sys.argv[1:] == ['--debug']
+
+    imap_url = input("IMAP URL>")
+    imap_port = input("IMAP PORT>")
+    mail_user = input("mail username>")
+    mail_pwd = input("mail password>")
+    print("IMAP data set, starting..")
     client = Client(debug=debug)
     time.sleep(1)
     client.connect()
-    rss_reader = RssReader('http://aa.com.tr/tr/rss/default?cat=guncel', client)
+    rss_reader = RssReader(client, 'http://aa.com.tr/tr/rss/default?cat=guncel')
     rss_reader.start()
+
+    mail_daemon = MailDaemon(client, imap_url, imap_port, mail_user, mail_pwd)
+    mail_daemon.start()
+
     while True:
         x = input(">>>")
         if x == "quit":
@@ -115,6 +126,7 @@ if __name__ == "__main__":
             json_str = json.dumps({'type': UpdateType.COMMAND, 'data': 'quit'})
             client.send_json(json_str)
             rss_reader.cancel()
+            mail_daemon.cancel()
             client.close()
             client.logger.info("time spent for quiting: " + str(time.time() - qtime) + " seconds")
             break

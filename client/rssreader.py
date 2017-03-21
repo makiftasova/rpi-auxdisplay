@@ -1,4 +1,3 @@
-import threading
 import feedparser
 import json
 import logging
@@ -9,12 +8,10 @@ import utils
 class RssReader(utils.LoopTask):
     __DATA_TYPE = 'news'
 
-    def __init__(self, rss_url, display_client, num_of_news=10, interval=5,
-                 group=None, name=None, args=(), kwargs=None, *, daemon=None):
-        super(RssReader, self).__init__(interval=interval, group=group, name=name, args=args,
-                                        daemon=daemon, kwargs=kwargs)
+    def __init__(self, display, rss_url, num_of_news=10, interval=5):
+        super(RssReader, self).__init__(interval=interval)
         self.url = rss_url
-        self.display = display_client
+        self.display = display
         self.num_of_news = num_of_news
         self.logger = logging.getLogger(__name__)
 
