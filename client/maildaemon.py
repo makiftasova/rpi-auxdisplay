@@ -1,12 +1,15 @@
 import logging
 import imaplib
+import json
 
 import utils
 
 
 class MailDaemon(utils.LoopTask):
-    def __init__(self, display, imap_url, imap_port, user, password, interval=0.2):
-        super(MailDaemon, self).__init__(interval=interval)
+    __DATA_TYPE = 'email'
+
+    def __init__(self, display, imap_url, imap_port, user, password, interval=10):
+        super(MailDaemon, self).__init__(interval=interval, name="maildaemon-thread")
 
         self.logger = logging.getLogger(__name__)
 
@@ -17,9 +20,11 @@ class MailDaemon(utils.LoopTask):
 
     def loop(self):
         status, response = self.ImapClient.search(None, 'UNSEEN')
-        unread_msg_nums = response[0].split()
-
-        self.logger.info("# on unread mails: {}".format(len(unread_msg_nums)))
+        unread_list = response[0].split()
+        unread_num = len(unread_list)
+        json_str = json.dumps({'type': self.__DATA_TYPE, 'data': unread_num})
+        self.display.send_json(json_str)
+        self.logger.info("unread mail count pushed to the display")
 
     def on_cancel(self):
         self.ImapClient.logout()

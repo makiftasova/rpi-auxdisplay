@@ -9,7 +9,7 @@ class RssReader(utils.LoopTask):
     __DATA_TYPE = 'news'
 
     def __init__(self, display, rss_url, num_of_news=10, interval=5):
-        super(RssReader, self).__init__(interval=interval)
+        super(RssReader, self).__init__(interval=interval, name="rssreader-thread")
         self.url = rss_url
         self.display = display
         self.num_of_news = num_of_news

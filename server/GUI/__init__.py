@@ -141,14 +141,14 @@ class MainWindow(tk.Tk):
             self.on_exit()
 
     def handle_email_update(self, event):
-        pass
+        print(self.sock_data)
+        self.mail_frame.update_count(self.sock_data)
 
     def handle_news_update(self, event):
         self.news_label.load_lines(self.sock_data)
 
     def handle_stock_update(self, event):
         self.stock_label.load_lines(self.sock_data)
-        pass
 
     def handle_weather_update(self, event):
         pass
