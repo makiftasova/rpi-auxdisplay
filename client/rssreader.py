@@ -1,7 +1,7 @@
 import threading
 import feedparser
 import json
-import logging2
+import logging
 
 import utils
 

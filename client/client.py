@@ -43,6 +43,7 @@ class Client(object):
             self.connect()
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((self.display_ip, self.display_port))
+        json_str += "\n"  # add newline to end of json string
         len_sent = s.send(bytes(json_str, 'UTF-8'))
         print("sent: ", len_sent, len(json_str), len_sent == len(json_str))
         s.close()

@@ -33,7 +33,9 @@ class CustomTCPServer(socketserver.TCPServer):
 
 class ClientRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
-        data = self.request.recv(4096).strip().decode('UTF-8')
+        _data_file = self.request.makefile()
+        data = _data_file.readline()
+        # data = self.request.recv(4096).strip().decode('UTF-8')
         self.server.logger.info("data received: " + data)
 
         if self.server.gui is not None:
