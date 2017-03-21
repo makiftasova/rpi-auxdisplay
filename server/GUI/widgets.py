@@ -1,5 +1,30 @@
+from PIL import Image, ImageTk
 import tkinter as tk
 from tkinter import ttk
+
+
+class MailFrame(tk.Frame):
+    def __init__(self, master=None, font=("Monospace", 45), cnf={}, **kw):
+        super(MailFrame, self).__init__(master=master, cnf=cnf, **kw)
+
+        self.__image_file = Image.open("server/GUI/icons/email.png").resize((60, 60),
+                                                                            Image.ANTIALIAS)
+        self.__mail_icon = ImageTk.PhotoImage(self.__image_file)
+
+        self.__image = tk.Label(self, image=self.__mail_icon, width=60, height=60)
+        self.__image.pack()
+
+        self.__count = tk.StringVar()
+        self.__count.set("0")
+        self.__count_label = tk.Label(self, textvariable=self.__count, font=font)
+        self.__count_label.pack(after=self.__image)
+
+    def update_count(self, count):
+        count = int(count)
+        if count > 9:
+            self.__count.set("9+")
+        else:
+            self.__count.set(str(count))
 
 
 class SlidingLabel(ttk.Label):

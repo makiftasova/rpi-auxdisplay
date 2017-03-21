@@ -89,15 +89,20 @@ class MainWindow(tk.Tk):
         self.bind(sequence=self.__EVENT_STOCK_UPDATE, func=self.handle_stock_update)
         self.bind(sequence=self.__EVENT_WEATHER_UPDATE, func=self.handle_weather_update)
 
+        self.mail_frame = None
         self.news_label = None
         self.stock_label = None
         self.btn_quit = None
         self.after(10, self.__init_widgets__)
 
     def __init_widgets__(self):
+
+        self.mail_frame = MailFrame(master=self)
+        self.mail_frame.pack()
+
         self.news_label = SlidingLabel(master=self, text_length=25)
         # self.news_label.grid(row=0, sticky=tk.W)
-        self.news_label.pack(fill=tk.X)
+        self.news_label.pack(after=self.mail_frame, fill=tk.X)
 
         self.news_label.load_lines(["Breaking News"])
 
