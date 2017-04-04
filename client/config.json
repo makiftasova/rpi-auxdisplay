@@ -1,0 +1,18 @@
+{
+  "gui": {
+    "stub_key": "stub_value"
+  },
+  "config": {
+    "mail": {
+      "url": "127.0.0.1",
+      "port": 993,
+      "username": "user@example.com",
+      "password": "samplepassword"
+    },
+    "weather":{
+      "city":"Istanbul",
+      "latitude":41.015137,
+      "longitude":28.979530
+    }
+  }
+}

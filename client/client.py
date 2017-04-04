@@ -1,3 +1,7 @@
+import os
+import pwd
+import appdirs
+import shutil
 import logging
 import socket
 import sys
@@ -9,6 +13,8 @@ from zeroconf import ServiceBrowser, ServiceStateChange, Zeroconf, ZeroconfServi
 from netdiscovery import AuxDisplayListener
 from rssreader import RssReader
 from maildaemon import MailDaemon
+
+APP_NAME = 'rpi-auxdisplay'
 
 
 class UpdateType(object):
@@ -105,10 +111,33 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         debug = sys.argv[1:] == ['--debug']
 
-    imap_url = input("IMAP URL>")
-    imap_port = input("IMAP PORT>")
-    mail_user = input("mail username>")
-    mail_pwd = input("mail password>")
+    username = pwd.getpwuid(os.getuid())[0]
+    app_dirs = appdirs.AppDirs(appname=APP_NAME, appauthor=APP_NAME)
+    config_dir = app_dirs.user_config_dir
+    config_file = os.path.join(config_dir, 'config.json')
+
+    if not os.path.isdir(config_dir):
+        try:
+            os.makedirs(config_dir)
+        except OSError as e:
+            sys.exit("Failed to create directory: {info}".format(info=e))
+
+    if not os.path.isfile(config_file):
+        try:
+            shutil.copy(os.path.abspath(os.path.join(os.path.dirname(sys.argv[0]),
+                                                     'config.json')), config_file)
+        except (OSError, IOError) as e:
+            sys.exit("Failed to copy default config file: {info}".format(info=e))
+
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+
+    config_mail = config['config']['mail']
+    print(config_mail)
+    imap_url = config_mail['url']
+    imap_port = config_mail['port']
+    mail_user = config_mail['username']
+    mail_pwd = config_mail['password']
     print("IMAP data set, starting..")
     client = Client(debug=debug)
     time.sleep(1)
