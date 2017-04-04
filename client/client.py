@@ -8,6 +8,8 @@ import sys
 import json
 import time
 
+import tkinter as tk
+
 from zeroconf import ServiceBrowser, ServiceStateChange, Zeroconf, ZeroconfServiceTypes
 
 from netdiscovery import AuxDisplayListener
@@ -35,10 +37,13 @@ class Client(object):
         self.listener = AuxDisplayListener(client=self, type=self.service_type)
         self.browser = ServiceBrowser(self.zeroconf, self.service_type, self.listener)
         self.displays = []
+        self.display_id = -1
         self.active_display = ""
         self.display_ip = "0.0.0.0"
         self.display_port = 0
         self.is_connected = False
+        self.win_root = None
+        self.win_listbox = None
 
     def __setup_logging(self, debug):
         log_level = logging.DEBUG if debug else logging.INFO
@@ -66,18 +71,47 @@ class Client(object):
         if self.active_display == name:
             self.is_connected = False
 
+    def __display_select_callback(self):
+        disp_id = self.win_listbox.curselection()
+        if not disp_id:
+            top = tk.Toplevel()
+            top.title("Error")
+            msg = tk.Message(top, text="You must pick a display from list")
+            msg.pack()
+            button = tk.Button(top, text="OK", command=top.destroy)
+            button.pack()
+        else:
+            self.display_id = disp_id[0]
+            self.win_root.destroy()
+            self.win_root = None
+
     def __ask_display(self):
-        for num, name in enumerate(self.displays):
-            print(num + 1, " ", name)
-        disp_id = int(input("select>")) - 1
-        return disp_id
+        self.win_root = tk.Tk()
+        self.win_listbox = tk.Listbox(self.win_root, selectmode=tk.SINGLE)
+        for item in self.displays:
+            self.win_listbox.insert(tk.END, item)
+        self.win_listbox.pack()
+
+        btn_ok = tk.Button(self.win_root, text="SELECT DISPLAY",
+                           command=self.__display_select_callback)
+        btn_ok.pack()
+
+        btn_quit = tk.Button(self.win_root, text="QUIT",
+                             command=self.win_root.quit)
+        btn_quit.pack()
+        tk.mainloop()
+
+        # for num, name in enumerate(self.displays):
+        #     print(num + 1, " ", name)
+        # disp_id = int(input("select>")) - 1
+        # return disp_id
 
     def connect(self, display_id=None):
         if display_id is None:
-            display_id = self.__ask_display()
-        if 0 > display_id > len(self.displays):
+            self.__ask_display()
+        if 0 > self.display_id > len(self.displays):
             raise IndexError("Illegal display index")
-        self.active_display = self.displays[display_id]
+        self.active_display = self.displays[self.display_id]
         self.__get_service_info()
         self.is_connected = True
 
