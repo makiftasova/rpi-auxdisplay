@@ -15,7 +15,7 @@ __all__ = ["widgets"]
 
 
 class UpdateType(object):
-    CLOCK = 'clock'
+    DATETIME = 'datetime'
     COMMAND = 'command'
     EMAIL = 'email'
     NEWS = 'news'
@@ -130,7 +130,7 @@ class MainWindow(tk.Tk):
         # self.btn_quit.grid(row=3)
 
     def trigger_gui_update(self, data_type):
-        if data_type == UpdateType.CLOCK:
+        if data_type == UpdateType.DATETIME:
             self.event_generate(self.__EVENT_DATE_TIME_UPDATE)
         elif data_type == UpdateType.COMMAND:
             self.event_generate(self.__EVENT_COMMAND_UPDATE)

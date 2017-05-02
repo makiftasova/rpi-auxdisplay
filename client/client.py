@@ -15,12 +15,13 @@ from zeroconf import ServiceBrowser, ServiceStateChange, Zeroconf, ZeroconfServi
 from netdiscovery import AuxDisplayListener
 from rssreader import RssReader
 from maildaemon import MailDaemon
+from datetimedaemon import DateTimeDaemon
 
 APP_NAME = 'rpi-auxdisplay'
 
 
 class UpdateType(object):
-    CLOCK = 'clock'
+    DATETIME = 'datetime'
     COMMAND = 'command'
     EMAIL = 'email'
     NEWS = 'news'
@@ -181,6 +182,9 @@ if __name__ == "__main__":
 
     mail_daemon = MailDaemon(client, imap_url, imap_port, mail_user, mail_pwd)
     mail_daemon.start()
+
+    datetime_daemon = DateTimeDaemon(client)
+    datetime_daemon.start()
 
     while True:
         x = input(">>>")
