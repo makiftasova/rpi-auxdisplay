@@ -51,7 +51,8 @@ class TimeFrame(tk.Frame):
 
 
 class WeatherFrame(tk.Frame):
-    def __init__(self, master=None, font=("Monospace", 45), temprature_unit="C", cnf={}, **kw):
+    def __init__(self, master=None, font=("Monospace", 45), temprature_unit="C",
+                 cnf={}, **kw):
         super(WeatherFrame, self).__init__(master=master, cnf=cnf, **kw)
 
         self.DEGREE_SIGN = u'\N{DEGREE SIGN}'
@@ -61,11 +62,18 @@ class WeatherFrame(tk.Frame):
         self.__temp_strig.set("0 " + self.DEGREE_SIGN + self.temp_unit)
 
         self.__temp = tk.Label(self, textvariable=self.__temp_strig, font=font)
-        self.__temp.grid()
+        self.__temp.grid(row=0)
 
-    def update_data(self, temperature=None):
+        self.__city_strig = tk.StringVar()
+        self.__city = tk.Label(self, textvariable=self.__city_strig, font=("Monospace", 30))
+        self.__city.grid(row=1)
+
+    def update_data(self, temperature=None, city=None):
         if temperature:
             self.__temp_strig.set(str(temperature) + " " + self.DEGREE_SIGN + self.temp_unit)
+
+        if city:
+            self.__city_strig.set(city)
 
 
 class SlidingLabel(ttk.Label):

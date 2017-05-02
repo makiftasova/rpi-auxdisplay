@@ -26,7 +26,7 @@ class WeatherDaemon(utils.LoopTask):
         curr_observation = json.loads(r.text)
         curr_observation = curr_observation['current_observation']
 
-        weather_data = {'temp': curr_observation['temp_c'], 'temp_unit':"C"}
+        weather_data = {'city': self.city, 'temp': curr_observation['temp_c'], 'temp_unit': "C"}
 
         json_str = json.dumps({'type': self.__DATA_TYPE, 'data': weather_data})
         self.display.send_json(json_str)

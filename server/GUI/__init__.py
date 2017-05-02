@@ -167,7 +167,7 @@ class MainWindow(tk.Tk):
 
     def handle_weather_update(self, event):
         data = self.sock_data
-        self.weather_frame.update_data(temperature=data['temp'])
+        self.weather_frame.update_data(temperature=data['temp'], city=data['city'])
         pass
 
     def on_exit(self):
