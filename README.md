@@ -16,12 +16,14 @@ Python 3.4 or newer should be ebough to run both server and client with the depe
 
 ### Dependencies
 * python3.4
+* requests: https://pypi.python.org/pypi/requests
 * netifaces: https://pypi.python.org/pypi/netifaces
 * zeroconf: https://pypi.python.org/pypi/zeroconf
 * feedparser: https://pypi.python.org/pypi/feedparser
 
 ### References
 * E-Mail Icon from https://commons.wikimedia.org/wiki/File:Email_Shiny_Icon.svg
+* Weather API from https://www.wunderground.com/
 
 ## Trivia
 * Developement envrionement is Asus K53SV Laptop with `Linux archlinux-k53sv 4.10.4-1-ARCH #1 SMP PREEMPT Sat Mar 18 19:39:18 CET 2017 x86_64 GNU/Linux` and a Raspberry Pi 3 Type B with official 7" touchscreen and `Linux raspberrypi 4.4.38-v7+ #938 SMP Thu Dec 15 15:22:21 GMT 2016 armv7l GNU/Linux`
