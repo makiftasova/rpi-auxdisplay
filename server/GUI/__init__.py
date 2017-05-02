@@ -146,7 +146,9 @@ class MainWindow(tk.Tk):
             self.logger.error("Unknown data type: " + data_type)
 
     def handle_date_time_update(self, event):
-        pass
+        time_string = self.sock_data['time']
+        date_string = self.sock_data['date']
+        self.time_frame.update_date_time(time_string=time_string, date_sting=date_string)
 
     def handle_command_update(self, event):
         cmd = self.sock_data
