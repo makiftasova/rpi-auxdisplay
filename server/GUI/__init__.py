@@ -166,6 +166,8 @@ class MainWindow(tk.Tk):
         self.stock_label.load_lines(self.sock_data)
 
     def handle_weather_update(self, event):
+        data = self.sock_data
+        self.weather_frame.update_data(temperature=data['temp'])
         pass
 
     def on_exit(self):

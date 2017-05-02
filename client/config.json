@@ -1,18 +1,21 @@
 {
-  "gui": {
-    "stub_key": "stub_value"
-  },
-  "config": {
-    "mail": {
-      "url": "127.0.0.1",
-      "port": 993,
-      "username": "user@example.com",
-      "password": "samplepassword"
-    },
-    "weather":{
-      "city":"Istanbul",
-      "latitude":41.015137,
-      "longitude":28.979530
-    }
-  }
+  	"gui": {
+        "stub_key": "stub_value"
+  	},
+  	"config": {
+    	"mail": {
+        	"url": "127.0.0.1",
+        	"port": 993,
+        	"username": "user@example.com",
+        	"password": "samplepassword"
+    	},
+    	"weather":{
+        	"url": "http://api.wunderground.com/api/{api_key}/conditions/q/{country}/{city}.json",
+        	"wunderground_key": "WEATHER UNDERGROUND API KEY",
+        	"country": "TR",
+        	"city":"Istanbul",
+        	"latitude":41.015137,
+        	"longitude":28.979530
+    	}
+  	}
 }

@@ -16,6 +16,7 @@ from netdiscovery import AuxDisplayListener
 from rssreader import RssReader
 from maildaemon import MailDaemon
 from datetimedaemon import DateTimeDaemon
+from weatherdaemon import WeatherDaemon
 
 APP_NAME = 'rpi-auxdisplay'
 
@@ -186,6 +187,10 @@ if __name__ == "__main__":
     datetime_daemon = DateTimeDaemon(client)
     datetime_daemon.start()
 
+    config_weather = config['config']['weather']
+    weather_daemon = WeatherDaemon(client, config=config_weather)
+    weather_daemon.start()
+
     while True:
         x = input(">>>")
         if x == "quit":
@@ -194,6 +199,8 @@ if __name__ == "__main__":
             client.send_json(json_str)
             rss_reader.cancel()
             mail_daemon.cancel()
+            datetime_daemon.cancel()
+            weather_daemon.cancel()
             client.close()
             client.logger.info("time spent for quiting: " + str(time.time() - qtime) + " seconds")
             break

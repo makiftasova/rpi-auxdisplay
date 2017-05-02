@@ -1,6 +1,8 @@
 appdirs
 asyncio
+requests>=2.13.0
 netifaces
 zeroconf>=0.18.0,<0.19.0
 feedparser>=5.2.1
 pillow>=4.0.0
+
