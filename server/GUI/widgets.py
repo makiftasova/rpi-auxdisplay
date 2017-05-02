@@ -65,7 +65,7 @@ class WeatherFrame(tk.Frame):
 
     def update_data(self, temperature=None):
         if temperature:
-            self.__temp_strig.set(temperature + " " + self.DEGREE_SIGN + self.temp_unit)
+            self.__temp_strig.set(str(temperature) + " " + self.DEGREE_SIGN + self.temp_unit)
 
 
 class SlidingLabel(ttk.Label):

@@ -23,10 +23,11 @@ class WeatherDaemon(utils.LoopTask):
 
     def loop(self):
         r = requests.get(self.request_url, timeout=self.timeout)
-        curr_observation = r.text['current_observation"']
+        curr_observation = json.loads(r.text)
+        curr_observation = curr_observation['current_observation']
 
         weather_data = {'temp': curr_observation['temp_c'], 'temp_unit':"C"}
 
         json_str = json.dumps({'type': self.__DATA_TYPE, 'data': weather_data})
         self.display.send_json(json_str)
-        self.logger.info("datetime pushed to display")
+        self.logger.info("weather info pushed to display")
