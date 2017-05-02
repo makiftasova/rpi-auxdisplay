@@ -12,12 +12,12 @@ class MailFrame(tk.Frame):
         self.__mail_icon = ImageTk.PhotoImage(self.__image_file)
 
         self.__image = tk.Label(self, image=self.__mail_icon, width=60, height=60)
-        self.__image.pack()
+        self.__image.grid(row=0, sticky=tk.W)
 
         self.__count = tk.StringVar()
         self.__count.set("0")
         self.__count_label = tk.Label(self, textvariable=self.__count, font=font)
-        self.__count_label.pack(after=self.__image)
+        self.__count_label.grid(row=1, sticky=tk.W)
 
     def update_count(self, count):
         count = int(count)
@@ -25,6 +25,47 @@ class MailFrame(tk.Frame):
             self.__count.set("9+")
         else:
             self.__count.set(str(count))
+
+
+class TimeFrame(tk.Frame):
+    def __init__(self, master=None, time_font=("Monospace", 45), date_font=("Monospace",
+                                                                            30), cnf={}, **kw):
+        super(TimeFrame, self).__init__(master=master, cnf=cnf, **kw)
+
+        self.__time_string = tk.StringVar()
+        self.__time_string.set("00:00")
+        self.__time = tk.Label(self, textvariable=self.__time_string, font=time_font)
+        self.__time.grid(row=0)
+
+        self.__date_string = tk.StringVar()
+        self.__date_string.set("1970.01.01")
+        self.__date = tk.Label(self, textvariable=self.__date_string, font=date_font)
+        self.__date.grid(row=1)
+
+    def update_date_time(self, time_string=None, date_sting=None):
+        if time_string:
+            self.__time_string.set(time_string)
+
+        if date_sting:
+            self.__date_string.set(date_sting)
+
+
+class WeatherFrame(tk.Frame):
+    def __init__(self, master=None, font=("Monospace", 45), temprature_unit=u'\N{DEGREE SIGN}' +
+                                                                            "C", cnf={}, **kw):
+        super(WeatherFrame, self).__init__(master=master, cnf=cnf, **kw)
+
+        self.temp_unit = temprature_unit
+
+        self.__temp_strig = tk.StringVar()
+        self.__temp_strig.set("0 " + self.temp_unit)
+
+        self.__temp = tk.Label(self, textvariable=self.__temp_strig, font=font)
+        self.__temp.grid()
+
+    def update_data(self, temprature=None):
+        if temprature:
+            self.__temp_strig.set(temprature + self.temp_unit)
 
 
 class SlidingLabel(ttk.Label):

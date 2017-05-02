@@ -47,7 +47,7 @@ class ClientRequestHandler(socketserver.BaseRequestHandler):
 
 
 class MainWindow(tk.Tk):
-    __EVENT_CLOCK_UPDATE = "<<UPDATE_CLOCK_EVENT>>"
+    __EVENT_DATE_TIME_UPDATE = "<<UPDATE_DATE_TIME_EVENT>>"
     __EVENT_COMMAND_UPDATE = "<<UPDATE_COMMAND_EVENT>>"
     __EVENT_EMAIL_UPDATE = "<<UPDATE_EMAIL_EVENT>>"
     __EVENT_NEWS_UPDATE = "<<UPDATE_NEWS_EVENT>>"
@@ -82,7 +82,7 @@ class MainWindow(tk.Tk):
         self.__setup_zeroconf()
         self.logger.info("Zeroconf service registered.")
 
-        self.bind(sequence=self.__EVENT_CLOCK_UPDATE, func=self.handle_clock_update)
+        self.bind(sequence=self.__EVENT_DATE_TIME_UPDATE, func=self.handle_date_time_update)
         self.bind(sequence=self.__EVENT_COMMAND_UPDATE, func=self.handle_command_update)
         self.bind(sequence=self.__EVENT_EMAIL_UPDATE, func=self.handle_email_update)
         self.bind(sequence=self.__EVENT_NEWS_UPDATE, func=self.handle_news_update)
@@ -97,28 +97,41 @@ class MainWindow(tk.Tk):
 
     def __init_widgets__(self):
 
-        self.mail_frame = MailFrame(master=self)
-        self.mail_frame.pack()
+        __first_row = tk.Frame(self, borderwidth=0, width=800, height=100)
+
+        self.mail_frame = MailFrame(master=__first_row, width=200, height=100)
+        self.mail_frame.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=50)
+
+        self.time_frame = TimeFrame(master=__first_row, width=400, height=100)
+        self.time_frame.pack(side=tk.LEFT, anchor=tk.CENTER, fill=tk.X, expand=True)
+
+        self.weather_frame = WeatherFrame(master=__first_row, width=200, height=100)
+        self.weather_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
+
+        # __first_row.grid(row=0)
+        __first_row.pack(fill=tk.X, expand=True)
 
         self.news_label = SlidingLabel(master=self, text_length=25)
-        # self.news_label.grid(row=0, sticky=tk.W)
-        self.news_label.pack(after=self.mail_frame, fill=tk.X)
+        # self.news_label.grid(row=1)
+        self.news_label.pack(after=__first_row, fill=tk.X)
 
         self.news_label.load_lines(["Breaking News"])
 
         self.stock_label = SlidingLabel(master=self, separator="|", text_length=25)
         # self.stock_label.grid(row=1, sticky=tk.W)
         self.stock_label.pack(after=self.news_label, fill=tk.X)
+        # self.stock_label.grid(row=2)
 
         self.stock_label.load_lines(["Exchange Rates"])
 
         self.btn_quit = ttk.Button(text="Quit", command=self.on_exit)
         # self.btn_quit.grid(row=2, sticky=tk.W)
         self.btn_quit.pack()
+        # self.btn_quit.grid(row=3)
 
     def trigger_gui_update(self, data_type):
         if data_type == UpdateType.CLOCK:
-            self.event_generate(self.__EVENT_CLOCK_UPDATE)
+            self.event_generate(self.__EVENT_DATE_TIME_UPDATE)
         elif data_type == UpdateType.COMMAND:
             self.event_generate(self.__EVENT_COMMAND_UPDATE)
         elif data_type == UpdateType.EMAIL:
@@ -132,7 +145,7 @@ class MainWindow(tk.Tk):
         else:
             self.logger.error("Unknown data type: " + data_type)
 
-    def handle_clock_update(self, event):
+    def handle_date_time_update(self, event):
         pass
 
     def handle_command_update(self, event):
