@@ -8,7 +8,7 @@ import utils
 class DateTimeDaemon(utils.LoopTask):
     __DATA_TYPE = 'datetime'
 
-    def __init__(self, display, interval=1):
+    def __init__(self, display, interval=0.25):
         super(DateTimeDaemon, self).__init__(interval=interval, name="datetimedaemon-thread")
         self.display = display
         self.logger = logging.getLogger(__name__)

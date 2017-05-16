@@ -8,7 +8,7 @@ import utils
 class WeatherDaemon(utils.LoopTask):
     __DATA_TYPE = 'weather'
 
-    def __init__(self, display, config={}, interval=15, request_timeout=5):
+    def __init__(self, display, config={}, interval=10, request_timeout=5):
         super(WeatherDaemon, self).__init__(interval=interval, name="weatherdaemon-thread")
 
         self.display = display

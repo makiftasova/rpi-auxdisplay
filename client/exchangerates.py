@@ -64,7 +64,7 @@ class ExchangeRatesTCMB(object):
 class ExchangeRatesDaemon(utils.LoopTask):
     __DATA_TYPE = 'exchange'
 
-    def __init__(self, display, interval=5):
+    def __init__(self, display, interval=10):
         super(ExchangeRatesDaemon, self).__init__(interval=interval,
                                                   name="exchangeratesdaemon-thread")
         self.display = display
