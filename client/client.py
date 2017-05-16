@@ -124,23 +124,9 @@ class Client(object):
         self.display_port = info.port
 
     def close(self):
-        # TODO send close command
         self.zeroconf.close()
-
-
-# TODO temp code for testing
-def handle_command(cmd):
-    cmd = cmd.lower()
-    args = cmd.split(" ")
-    data_type = args[0]
-    json_str = ""
-    if data_type == UpdateType.EXCHANGE:
-        json_str = json.dumps({'type': data_type, 'data': args[1:]})
-    else:
-        data = " ".join(args[1:])
-        json_str = json.dumps({'type': data_type, 'data': data})
-
-    return json_str
+        json_str = json.dumps({'type': UpdateType.COMMAND, 'data': 'quit'})
+        self.send_json(json_str)
 
 
 if __name__ == "__main__":
@@ -198,8 +184,6 @@ if __name__ == "__main__":
         x = input(">>>")
         if x in ("quit", "exit"):
             qtime = time.time()
-            json_str = json.dumps({'type': UpdateType.COMMAND, 'data': 'quit'})
-            client.send_json(json_str)
             rss_reader.cancel()
             mail_daemon.cancel()
             datetime_daemon.cancel()
