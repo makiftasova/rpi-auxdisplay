@@ -17,6 +17,7 @@ from rssreader import RssReader
 from maildaemon import MailDaemon
 from datetimedaemon import DateTimeDaemon
 from weatherdaemon import WeatherDaemon
+from exchangerates import ExchangeRatesDaemon
 
 APP_NAME = 'rpi-auxdisplay'
 
@@ -25,8 +26,8 @@ class UpdateType(object):
     DATETIME = 'datetime'
     COMMAND = 'command'
     EMAIL = 'email'
+    EXCHANGE = 'exchange'
     NEWS = 'news'
-    STOCK = 'stock'
     WEATHER = 'weather'
 
 
@@ -133,7 +134,7 @@ def handle_command(cmd):
     args = cmd.split(" ")
     data_type = args[0]
     json_str = ""
-    if data_type == UpdateType.STOCK:
+    if data_type == UpdateType.EXCHANGE:
         json_str = json.dumps({'type': data_type, 'data': args[1:]})
     else:
         data = " ".join(args[1:])
@@ -169,7 +170,6 @@ if __name__ == "__main__":
         config = json.load(file)
 
     config_mail = config['config']['mail']
-    print(config_mail)
     imap_url = config_mail['url']
     imap_port = config_mail['port']
     mail_user = config_mail['username']
@@ -191,9 +191,12 @@ if __name__ == "__main__":
     weather_daemon = WeatherDaemon(client, config=config_weather)
     weather_daemon.start()
 
+    exchange_rates_daemon = ExchangeRatesDaemon(client)
+    exchange_rates_daemon.start()
+
     while True:
         x = input(">>>")
-        if x == "quit":
+        if x in ("quit", "exit"):
             qtime = time.time()
             json_str = json.dumps({'type': UpdateType.COMMAND, 'data': 'quit'})
             client.send_json(json_str)
@@ -201,7 +204,7 @@ if __name__ == "__main__":
             mail_daemon.cancel()
             datetime_daemon.cancel()
             weather_daemon.cancel()
+            exchange_rates_daemon.cancel()
             client.close()
             client.logger.info("time spent for quiting: " + str(time.time() - qtime) + " seconds")
             break
-        client.send_json(handle_command(x))

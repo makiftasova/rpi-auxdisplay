@@ -86,12 +86,12 @@ class MainWindow(tk.Tk):
         self.bind(sequence=self.__EVENT_COMMAND_UPDATE, func=self.handle_command_update)
         self.bind(sequence=self.__EVENT_EMAIL_UPDATE, func=self.handle_email_update)
         self.bind(sequence=self.__EVENT_NEWS_UPDATE, func=self.handle_news_update)
-        self.bind(sequence=self.__EVENT_STOCK_UPDATE, func=self.handle_stock_update)
+        self.bind(sequence=self.__EVENT_STOCK_UPDATE, func=self.handle_exchange_update)
         self.bind(sequence=self.__EVENT_WEATHER_UPDATE, func=self.handle_weather_update)
 
         self.mail_frame = None
         self.news_label = None
-        self.stock_label = None
+        self.exchange_label = None
         self.btn_quit = None
         self.after(10, self.__init_widgets__)
 
@@ -117,12 +117,12 @@ class MainWindow(tk.Tk):
 
         self.news_label.load_lines(["Breaking News"])
 
-        self.stock_label = SlidingLabel(master=self, separator="|", text_length=25)
+        self.exchange_label = SlidingLabel(master=self, separator="|", text_length=25)
         # self.stock_label.grid(row=1, sticky=tk.W)
-        self.stock_label.pack(after=self.news_label, fill=tk.X)
+        self.exchange_label.pack(after=self.news_label, fill=tk.X)
         # self.stock_label.grid(row=2)
 
-        self.stock_label.load_lines(["Exchange Rates"])
+        self.exchange_label.load_lines(["Exchange Rates"])
 
         self.btn_quit = ttk.Button(text="Quit", command=self.on_exit)
         # self.btn_quit.grid(row=2, sticky=tk.W)
@@ -162,8 +162,8 @@ class MainWindow(tk.Tk):
     def handle_news_update(self, event):
         self.news_label.load_lines(self.sock_data)
 
-    def handle_stock_update(self, event):
-        self.stock_label.load_lines(self.sock_data)
+    def handle_exchange_update(self, event):
+        self.exchange_label.load_lines(self.sock_data)
 
     def handle_weather_update(self, event):
         data = self.sock_data
