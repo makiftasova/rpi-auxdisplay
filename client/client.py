@@ -155,29 +155,32 @@ if __name__ == "__main__":
     with open(config_file, 'r') as file:
         config = json.load(file)
 
+    client = Client(debug=debug)
+    time.sleep(1)
+    client.connect()
+
+    rss_config = config['config']['rssreader']
+    rss_reader = RssReader(client, rss_url=rss_config['url'], interval=rss_config['interval'])
+    rss_reader.start()
+
     config_mail = config['config']['mail']
     imap_url = config_mail['url']
     imap_port = config_mail['port']
     mail_user = config_mail['username']
     mail_pwd = config_mail['password']
-    print("IMAP data set, starting..")
-    client = Client(debug=debug)
-    time.sleep(1)
-    client.connect()
-    rss_reader = RssReader(client, 'http://aa.com.tr/tr/rss/default?cat=guncel')
-    rss_reader.start()
-
+    logging.getLogger(__name__).info("IMAP data set, starting..")
     mail_daemon = MailDaemon(client, imap_url, imap_port, mail_user, mail_pwd)
     mail_daemon.start()
 
     datetime_daemon = DateTimeDaemon(client)
     datetime_daemon.start()
 
-    config_weather = config['config']['weather']
-    weather_daemon = WeatherDaemon(client, config=config_weather)
+    weather_config = config['config']['weather']
+    weather_daemon = WeatherDaemon(client, config=weather_config)
     weather_daemon.start()
 
-    exchange_rates_daemon = ExchangeRatesDaemon(client)
+    exchange_config=config['config']['exchange']
+    exchange_rates_daemon = ExchangeRatesDaemon(client, interval=exchange_config['interval'])
     exchange_rates_daemon.start()
 
     while True:

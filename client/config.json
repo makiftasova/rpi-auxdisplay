@@ -1,21 +1,30 @@
 {
-  	"gui": {
+    "gui": {
         "stub_key": "stub_value"
-  	},
-  	"config": {
-    	"mail": {
-        	"url": "127.0.0.1",
-        	"port": 993,
-        	"username": "user@example.com",
-        	"password": "samplepassword"
-    	},
-    	"weather":{
-        	"url": "http://api.wunderground.com/api/{api_key}/conditions/q/{country}/{city}.json",
-        	"wunderground_key": "WEATHER UNDERGROUND API KEY",
-        	"country": "TR",
-        	"city":"Istanbul",
-        	"latitude":41.015137,
-        	"longitude":28.979530
-    	}
-  	}
+    },
+    "config": {
+        "mail": {
+            "url": "127.0.0.1",
+            "port": 993,
+            "username": "user@example.com",
+            "password": "samplepassword"
+            "interval": 10
+        },
+        "weather": {
+            "url": "http://api.wunderground.com/api/{api_key}/conditions/q/{country}/{city}.json",
+            "wunderground_key": "WEATHER UNDERGROUND API KEY",
+            "country": "TR",
+            "city": "Istanbul",
+            "latitude": 41.015137,
+            "longitude": 28.979530,
+            "interval": 10
+        },
+        "exchange": {
+            "interval": 10
+        },
+        "rssreader": {
+            "url": "http://aa.com.tr/tr/rss/default?cat=guncel",
+            "interval": 10
+        }
+    }
 }
