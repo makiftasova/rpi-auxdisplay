@@ -19,7 +19,7 @@ class UpdateType(object):
     COMMAND = 'command'
     EMAIL = 'email'
     NEWS = 'news'
-    STOCK = 'stock'
+    EXCHANGE = 'exchange'
     WEATHER = 'weather'
 
 
@@ -138,7 +138,7 @@ class MainWindow(tk.Tk):
             self.event_generate(self.__EVENT_EMAIL_UPDATE)
         elif data_type == UpdateType.NEWS:
             self.event_generate(self.__EVENT_NEWS_UPDATE)
-        elif data_type == UpdateType.STOCK:
+        elif data_type == UpdateType.EXCHANGE:
             self.event_generate(self.__EVENT_STOCK_UPDATE)
         elif data_type == UpdateType.WEATHER:
             self.event_generate(self.__EVENT_WEATHER_UPDATE)
