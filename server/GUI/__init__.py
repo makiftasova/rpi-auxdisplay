@@ -108,26 +108,17 @@ class MainWindow(tk.Tk):
         self.weather_frame = WeatherFrame(master=__first_row, width=200, height=100)
         self.weather_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
-        # __first_row.grid(row=0)
         __first_row.pack(fill=tk.X, expand=True)
 
         self.news_label = SlidingLabel(master=self, text_length=25)
-        # self.news_label.grid(row=1)
         self.news_label.pack(after=__first_row, fill=tk.X)
 
         self.news_label.load_lines(["Breaking News"])
 
         self.exchange_label = SlidingLabel(master=self, separator="|", text_length=25)
-        # self.stock_label.grid(row=1, sticky=tk.W)
         self.exchange_label.pack(after=self.news_label, fill=tk.X)
-        # self.stock_label.grid(row=2)
 
         self.exchange_label.load_lines(["Exchange Rates"])
-
-        self.btn_quit = ttk.Button(text="Quit", command=self.on_exit)
-        # self.btn_quit.grid(row=2, sticky=tk.W)
-        self.btn_quit.pack()
-        # self.btn_quit.grid(row=3)
 
     def trigger_gui_update(self, data_type):
         if data_type == UpdateType.DATETIME:
